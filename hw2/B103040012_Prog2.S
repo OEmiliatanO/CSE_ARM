@@ -104,6 +104,33 @@ LOOP:
 	cmp r4, #1
 	beq PRINT_BREAK
 	
+	@swp
+	stmfd   sp!, {r0, r1, r2}
+	mov r0, r1
+	bl SWP_TYPE
+	mov r4, r0
+	ldmfd   sp!, {r0, r1, r2}
+	cmp r4, #1
+	beq PRINT_BREAK
+	
+	@msr
+	stmfd   sp!, {r0, r1, r2}
+	mov r0, r1
+	bl MSR_TYPE
+	mov r4, r0
+	ldmfd   sp!, {r0, r1, r2}
+	cmp r4, #1
+	beq PRINT_BREAK
+	
+	@mrs
+	stmfd   sp!, {r0, r1, r2}
+	mov r0, r1
+	bl MRS_TYPE
+	mov r4, r0
+	ldmfd   sp!, {r0, r1, r2}
+	cmp r4, #1
+	beq PRINT_BREAK
+	
 	@mul
 	stmfd	sp!, {r0, r1, r2}
 	mov r0, r1
@@ -245,6 +272,11 @@ BLXLABEL_TYPE:
 	@bfi r2, r0, #0, #24
 	and r2, r0, #0xffffff
 	mov r2, r2, lsl #2
+	@bfi r3, r2, #25, #1
+	and r3, r2, #0x2000000
+	mov r3, r3, lsr #25
+	cmp r3, #1
+	orreq r2, r2, #0xfc000000
 	add r1, r1, r2
 	add r1, r1, #8
 	ldr r0, =string_hex
@@ -444,6 +476,104 @@ CLZ_TYPE:
 	mov r0, #1
 	bx lr
 
+@r0 = instruction
+SWP_TYPE:
+	@bfi r1, r0, #23, #5
+	and r1, r0, #0xf800000
+	mov r1, r1, lsr #23
+	cmp r1, #2
+	movne r0, #0
+	bxne lr
+	@bfi r1, r0, #20, #2
+	and r1, r0, #0x300000
+	mov r1, r1, lsr #20
+	cmp r1, #0
+	movne r0, #0
+	bxne lr
+	@bfi r1, r0, #4, 8
+	and r1, r0, #0xff0
+	mov r1, r1, lsr #4
+	cmp r1, #9
+	movne r0, #0
+	bxne lr
+	stmfd	sp!, {r0, r1, r2, r3, fp, lr}
+	@bfi r1, r0, #22, #1
+	and r1, r0, #0x400000
+	mov r1, r1, lsr #22
+	cmp r1, #1
+	ldr r0, =print_string
+	ldreq r1, =swp_table+4
+	ldrne r1, =swp_table
+	bl printf
+	ldmfd	sp!, {r0, r1, r2, r3, fp, lr}
+	
+	mov r0, #1
+	bx lr
+
+@r0 = instruction
+MRS_TYPE:
+	@bfi r1, r0, #23, #5
+	and r1, r0, #0xf800000
+	mov r1, r1, lsr #23
+	cmp r1, #2
+	movne r0, #0
+	bxne lr
+	@bfi r1, r0, #16, #6
+	and r1, r0, #0x3f0000
+	mov r1, r1, lsr #16
+	cmp r1, #15
+	movne r0, #0
+	bxne lr
+	@bfi r1, r0, #0, #12
+	ldr r2, =0xfff
+	and r1, r0, r2
+	cmp r1, #0
+	movne r0, #0
+	bxne lr
+	stmfd	sp!, {r0, r1, r2, r3, fp, lr}
+	ldr r0, =print_string
+	ldr r1, =mrs_table
+	bl printf
+	ldmfd	sp!, {r0, r1, r2, r3, fp, lr}
+	
+	mov r0, #1
+	bx lr
+
+@r0 = instruction
+MSR_TYPE:
+	@bfi r1, r0, #26, #2
+	and r1, r0, #0xc000000
+	mov r1, r1, lsr #26
+	cmp r1, #0
+	movne r0, #0
+	bxne lr
+	@bfi r1, r0, #23, #2
+	and r1, r0, #0x1800000
+	mov r1, r1, lsr #23
+	cmp r1, #2
+	movne r0, #0
+	bxne lr
+	@bfi r1, r0, #20, #2
+	and r1, r0, #0x300000
+	mov r1, r1, lsr #20
+	cmp r1, #2
+	movne r0, #0
+	bxne lr
+	@bfi r1, r0, #12, #4
+	and r1, r0, #0xf000
+	mov r1, r1, lsr #12
+	cmp r1, #15
+	movne r0, #0
+	bxne lr
+	stmfd	sp!, {r0, r1, r2, r3, fp, lr}
+	ldr r0, =print_string
+	ldr r1, =msr_table
+	bl printf
+	ldmfd	sp!, {r0, r1, r2, r3, fp, lr}
+	
+	mov r0, #1
+	bx lr
+
 @data section
 string_hex:
 	.asciz "0x%X \t"
@@ -455,7 +585,13 @@ cond_table:
 data_processing_table:
 	.asciz "AND" "EOR" "SUB" "RSB" "ADD" "ADC" "SBC" "RSC" "TST" "TEQ" "CMP" "CMN" "ORR" "MOV" "BIC" "MVN"
 clz_table:
-	.asciz "CLZ"
+	.asciz "UND"
+swp_table:
+	.asciz "UND" "UND"
+mrs_table:
+	.asciz "UND"
+msr_table:
+	.asciz "UND"
 mul_table:
 	.asciz "MUL\0\0" "MLA\0\0" "\0\0\0\0\0" "\0\0\0\0\0" "UMULL" "UMLAL" "SMULL" "SMLAL"
 branch_table:

@@ -1,4 +1,3 @@
-__LABEL__:
 swieq #0x0
 swine #0x0
 swics #0x0
@@ -692,78 +691,95 @@ stmaled r0, {r1, r2, r3}
 beq __LABEL__
 bleq __LABEL__
 bxeq lr
+blxeq lr
 bne __LABEL__
 blne __LABEL__
 bxne lr
+blxne lr
 bcs __LABEL__
 blcs __LABEL__
 bxcs lr
+blxcs lr
 bcc __LABEL__
 blcc __LABEL__
 bxcc lr
+blxcc lr
 bmi __LABEL__
 blmi __LABEL__
 bxmi lr
+blxmi lr
 bpl __LABEL__
 blpl __LABEL__
 bxpl lr
+blxpl lr
 bvs __LABEL__
 blvs __LABEL__
 bxvs lr
+blxvs lr
 bvc __LABEL__
 blvc __LABEL__
 bxvc lr
+blxvc lr
 bhi __LABEL__
 blhi __LABEL__
 bxhi lr
+blxhi lr
 bls __LABEL__
 blls __LABEL__
 bxls lr
+blxls lr
 bge __LABEL__
 blge __LABEL__
 bxge lr
+blxge lr
 blt __LABEL__
 bllt __LABEL__
 bxlt lr
+blxlt lr
 bgt __LABEL__
 blgt __LABEL__
 bxgt lr
+blxgt lr
 ble __LABEL__
 blle __LABEL__
 bxle lr
+blxle lr
 bal __LABEL__
 blal __LABEL__
 bxal lr
+blxal lr
+blx __LABEL__
+__LABEL__:
 swpeq r0, r1, [r2]
-swpeq r0, r1, [r2]
+swpeqb r0, r1, [r2]
 swpne r0, r1, [r2]
-swpne r0, r1, [r2]
+swpneb r0, r1, [r2]
 swpcs r0, r1, [r2]
-swpcs r0, r1, [r2]
+swpcsb r0, r1, [r2]
 swpcc r0, r1, [r2]
-swpcc r0, r1, [r2]
+swpccb r0, r1, [r2]
 swpmi r0, r1, [r2]
-swpmi r0, r1, [r2]
+swpmib r0, r1, [r2]
 swppl r0, r1, [r2]
-swppl r0, r1, [r2]
+swpplb r0, r1, [r2]
 swpvs r0, r1, [r2]
-swpvs r0, r1, [r2]
+swpvsb r0, r1, [r2]
 swpvc r0, r1, [r2]
-swpvc r0, r1, [r2]
+swpvcb r0, r1, [r2]
 swphi r0, r1, [r2]
-swphi r0, r1, [r2]
+swphib r0, r1, [r2]
 swpls r0, r1, [r2]
-swpls r0, r1, [r2]
+swplsb r0, r1, [r2]
 swpge r0, r1, [r2]
-swpge r0, r1, [r2]
+swpgeb r0, r1, [r2]
 swplt r0, r1, [r2]
-swplt r0, r1, [r2]
+swpltb r0, r1, [r2]
 swpgt r0, r1, [r2]
-swpgt r0, r1, [r2]
+swpgtb r0, r1, [r2]
 swple r0, r1, [r2]
-swple r0, r1, [r2]
+swpleb r0, r1, [r2]
 swpal r0, r1, [r2]
-swpal r0, r1, [r2]
+swpalb r0, r1, [r2]
 mrseq r0, CPSR
 msreq CPSR, r0
 mrsne r0, CPSR
