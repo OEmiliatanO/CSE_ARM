@@ -40,8 +40,11 @@
         cmp     ecx, 0x0
         je      GCD_B_is_ZERO
 GCD_LOOP:
-        cdq
-        idiv    ecx
+        ;cdq
+        ;idiv    ecx
+        xor     edx, edx
+        div     ecx
+		
         mov     eax, edx
         xchg    ecx, eax
         cmp     ecx, 0x0
@@ -65,8 +68,11 @@ GCD_B_is_ZERO:
         mov     ecx, eax
         pop     rdx
         mov     rax, rdx
-        cdq
-        idiv    ecx
+        ;cdq
+        ;idiv    ecx
+        xor     edx, edx
+        div     ecx
+		
         pop     rcx
         mul     ecx
 		
@@ -87,8 +93,10 @@ GCD_B_is_ZERO:
         mov     rbx, 10
 print_int_LOOP:
         inc     ecx
-        cdq
-        idiv    ebx
+        ;cdq
+        ;idiv    ebx
+        xor     edx, edx
+        div     ebx
         push    rdx        ; eax % 10
         cmp     eax, 0
         je      PRINT_OUT
