@@ -10,7 +10,7 @@
  ISSTR          db ' is ',0x0
  ISSTR_LEN      equ $-ISSTR
  DOTSTR         db '.',0x0
- DOTSTR_LEN      equ $-DOTSTR
+ DOTSTR_LEN     equ $-DOTSTR
  CHAR           db 0x0,0x0
  TESTNUMA       db '100',0x0
  TESTNUMB       db '1',0x0
@@ -32,6 +32,7 @@
 
  gcd:
  ; gcd(eax, edx) -> eax
+		;prologue
         push    rcx
         
         mov     ecx, edx
@@ -49,11 +50,15 @@ GCD_LOOP:
 GCD_B_is_ZERO:
         add     eax, ecx
         
+		;epilogue
         pop     rcx
         ret
+
  lcm:
  ; lcm(eax, edx) -> eax
+		;prologue
         push    rcx
+		
         push    rax
         push    rdx
         call    gcd
@@ -64,11 +69,14 @@ GCD_B_is_ZERO:
         idiv    ecx
         pop     rcx
         mul     ecx
+		
+		;epilogue
         pop     rcx
         ret
          
  print_int:
  ; print_int(eax) -> void
+		;prologue
         push    rdx
         push    rcx
         push    rbx
@@ -83,18 +91,17 @@ print_int_LOOP:
         idiv    ebx
         push    rdx        ; eax % 10
         cmp     eax, 0
-        je      PRINT_INT_ZERO
+        je      PRINT_OUT
         jmp     print_int_LOOP
-PRINT_INT_ZERO:
+PRINT_OUT:
         pop     rbx
         add     bl, '0'
         mov     [CHAR], bl
         mov     rsi, CHAR
         call    print_CHAR
-        dec     ecx
-        jz      PRINT_INT_RET
-        jmp     PRINT_INT_ZERO
-PRINT_INT_RET:
+        loop    PRINT_OUT
+
+		;epilogue
         pop     rax
         pop     rbx
         pop     rcx
@@ -103,17 +110,19 @@ PRINT_INT_RET:
 
  to_int:
  ; to_int(rsi) -> eax
+		;prologue
         push    rcx
         push    rbx
+		
         xor     rax, rax
         xor     rbx, rbx
         xor     rcx, rcx
 TO_INT_LOOP:
         mov     cl, [rsi]
         cmp     cl, '0'
-        jl      TO_INT_RET
+        jl      TO_INT_EXIT
         cmp     cl, '9'
-        jg      TO_INT_RET
+        jg      TO_INT_EXIT
         inc     rsi
         sub     cl, '0'
         mov     ebx, eax
@@ -122,13 +131,16 @@ TO_INT_LOOP:
         add     eax, ebx
         add     eax, ecx
         jmp     TO_INT_LOOP
-TO_INT_RET:
+TO_INT_EXIT:
+
+		;epilogue
         pop     rbx
         pop     rcx
         ret
 
  print_CHAR:
  ; print_CHAR(rsi) -> void
+		;prologue
         push    rdx
         push    rcx
         push    rbx
@@ -139,7 +151,8 @@ TO_INT_RET:
         mov     rbx, STDOUT
         mov     rax, SYS_WRITE
         int     0x80
-         
+        
+		;epilogue
         pop     rax
         pop     rbx
         pop     rcx
@@ -148,6 +161,7 @@ TO_INT_RET:
         
  print_STR:
  ; print_STR(rsi: str, rdi: len) -> void
+		;prologue
         push    rdx
         push    rcx
         push    rbx
@@ -159,6 +173,7 @@ TO_INT_RET:
         mov     rax, SYS_WRITE
         int     0x80
         
+		;epilogue
         pop     rax
         pop     rbx
         pop     rcx
@@ -166,6 +181,7 @@ TO_INT_RET:
         ret
 
  read_char:
+		;prologue
         push    rdx
         push    rcx
         push    rbx
@@ -177,6 +193,7 @@ TO_INT_RET:
         mov     rax, SYS_READ
         int     0x80
         
+		;epilogue
         pop     rax
         pop     rbx
         pop     rcx
@@ -186,6 +203,7 @@ TO_INT_RET:
  read_till_space:
  ; read_till_space(rsi: str)
  ; put string into [rsi]
+		;prologue
         push    rdx
         push    rcx
         push    rbx
@@ -211,6 +229,8 @@ RS_LOOP:
 RS_EXIT:
         mov     al, 0x0
         mov     [rsi], al
+		
+		;epilogue
         pop     rax
         pop     rbx
         pop     rcx
