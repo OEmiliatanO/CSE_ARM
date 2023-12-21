@@ -1,15 +1,15 @@
      section .data
- MAXSTR         db 'Function 1: maximum of ', 0x0
+ MAXSTR         db 'Function 1: maximum of '
  MAXSTR_LEN     equ $-MAXSTR
- GCDSTR         db 'Function 2: greatest common divisor of ', 0x0
+ GCDSTR         db 'Function 2: greatest common divisor of '
  GCDSTR_LEN     equ $-GCDSTR
- LCMSTR         db 'Function 3: least common multiply of ', 0x0
+ LCMSTR         db 'Function 3: least common multiply of '
  LCMSTR_LEN     equ $-LCMSTR
- ANDSTR         db ' and ',0x0
+ ANDSTR         db ' and '
  ANDSTR_LEN     equ $-ANDSTR
- ISSTR          db ' is ',0x0
+ ISSTR          db ' is '
  ISSTR_LEN      equ $-ISSTR
- DOTSTR         db '.',0x0
+ DOTSTR         db '.'
  DOTSTR_LEN     equ $-DOTSTR
  CHAR           db 0x0,0x0
  TESTNUMA       db '100',0x0
